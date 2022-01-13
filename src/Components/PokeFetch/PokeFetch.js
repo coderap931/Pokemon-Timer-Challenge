@@ -25,8 +25,26 @@ class PokeFetch extends Component {
           pokeSprite: res.sprites.front_default,
           pokeName: res.species.name,
         })
+        this.countdown();
       })
       .catch((err) => console.log(err))
+  }
+
+  countdown() {
+    let secondsLeft = 10;
+    let sprite = document.getElementsByClassName("pokeImg");
+    let name = document.getElementsByClassName("pokeName");
+    if(secondsLeft > 0) {
+      sprite.style.color = "black";
+      name.style.opacity = "0";
+      setTimeout(() => {secondsLeft = secondsLeft- 1}, 1000);
+    } else if (secondsLeft === 0) {
+      sprite.style.opacity = "1";
+      name.style.opacity = "1";
+    } else {
+      sprite.style.opacity = "0";
+      name.style.opacity = "0";
+    }
   }
 
   render() {
