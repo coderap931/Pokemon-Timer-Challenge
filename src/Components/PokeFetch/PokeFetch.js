@@ -3,12 +3,13 @@ import './PokeFetch.css';
 
 
 class PokeFetch extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       pokeInfo: '',
       pokeSprite: '',
       pokeName: '',
+      secondsLeft: 0,
     }
   }
 
@@ -24,27 +25,18 @@ class PokeFetch extends Component {
           pokeInfo: res,
           pokeSprite: res.sprites.front_default,
           pokeName: res.species.name,
+          secondsLeft: 10,
         })
-        this.countdown();
+        this.countdown = this.countdown.bind(this);
       })
       .catch((err) => console.log(err))
   }
 
   countdown() {
-    let secondsLeft = 10;
-    let sprite = document.getElementsByClassName("pokeImg");
-    let name = document.getElementsByClassName("pokeName");
-    if(secondsLeft > 0) {
-      sprite.style.color = "black";
-      name.style.opacity = "0";
-      setTimeout(() => {secondsLeft = secondsLeft- 1}, 1000);
-    } else if (secondsLeft === 0) {
-      sprite.style.opacity = "1";
-      name.style.opacity = "1";
-    } else {
-      sprite.style.opacity = "0";
-      name.style.opacity = "0";
-    }
+    setTimeout(() => {
+      this.setState({
+        secondsLeft: this.state.secondsLeft - 1,
+      }); console.log(this.state.secondsLeft)}, 1000);
   }
 
   render() {
@@ -53,8 +45,17 @@ class PokeFetch extends Component {
         <button className={'start'} onClick={() => this.fetchPokemon()}>Start!</button>
         <h1 className={'timer'} >Timer Display</h1>
         <div className={'pokeWrap'}>
-          <img className={'pokeImg'} src={this.state.pokeSprite} />
-          <h1 className={'pokeName'}>{this.state.pokeName}</h1>
+          {this.state.secondsLeft > 0 ? (
+            <div>
+              <img className={'pokeImg'} style={{filter: 'brightness(0%)'}} src={this.state.pokeSprite} />
+              <h1 className={'pokeName'} style={{opacity: '0%'}} >{this.state.pokeName}</h1>
+            </div>
+          ) : (
+            <div>
+              <img className={'pokeImg'} style={{filter: 'brightness(100%)'}} src={this.state.pokeSprite} />
+              <h1 className={'pokeName'} style={{opacity: '100%'}} >{this.state.pokeName}</h1>
+            </div>
+          )}
         </div>
       </div>
     )
