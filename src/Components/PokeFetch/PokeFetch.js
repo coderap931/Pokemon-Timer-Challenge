@@ -27,16 +27,21 @@ class PokeFetch extends Component {
           pokeName: res.species.name,
           secondsLeft: 10,
         })
-        this.countdown = this.countdown.bind(this);
+        this.countdown();
+        // this.countdown = this.countdown.bind(this);
       })
       .catch((err) => console.log(err))
   }
 
   countdown() {
-    setTimeout(() => {
-      this.setState({
-        secondsLeft: this.state.secondsLeft - 1,
-      }); console.log(this.state.secondsLeft)}, 1000);
+    let interval = setInterval(() => {
+      if (this.state.secondsLeft > 0){
+        this.setState({
+          secondsLeft: this.state.secondsLeft - 1,
+        }); console.log(this.state.secondsLeft)
+      } else {
+        clearInterval(interval)
+    }}, 1000)
   }
 
   render() {
@@ -44,6 +49,9 @@ class PokeFetch extends Component {
       <div className={'wrapper'}>
         <button className={'start'} onClick={() => this.fetchPokemon()}>Start!</button>
         <h1 className={'timer'} >Timer Display</h1>
+        <h2>{this.state.secondsLeft}</h2>
+        <br />
+        <br />
         <div className={'pokeWrap'}>
           {this.state.secondsLeft > 0 ? (
             <div>
